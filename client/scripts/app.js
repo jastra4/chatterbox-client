@@ -9,9 +9,9 @@ var app = {
     this.fetch();
     $('.username').on('click', app.handleUsernameClick);    
     $('#send').on('submit', function(event) {
-       event.preventDefault();
-       app.handleSubmit();
-    }); // do not use an anonymous function here
+      event.preventDefault();
+      app.handleSubmit();
+    }); // removing anonymous function would pass test but break app
     $('.refresh').on('click', function(event) {
       event.preventDefault();
       app.fetch();
@@ -21,26 +21,15 @@ var app = {
       console.log($('#createRoom').val());
       $('#roomSelect').append('<option value="' + $('#createRoom').text() + '">' + $('#createRoom').text() + '</option>');
     });
-    // $('body').on('click', function(event) {
-    //   event.preventDefault();
-    //   console.log('asdf');
-    //   friends[$(this).first().first().val()] = $(this).first().first().val();
-    //   //console.log(friends);
-    // });
   },
   server: 'http://parse.atx.hackreactor.com/chatterbox/classes/messages',
   send: function(message) {
-    //console.log('send ran');
     $.ajax({
-      // This is the url you should use to communicate with the parse API server.
       url: this.server,
       type: 'POST',
-      data: message, //JSON.stringify(message), // may need to apply JSON.stringify()
-      //dataType: 'json', 
-      //contentType: 'json',
+      data: message,
       success: function (data) {
         app.fetch();
-        //app.renderMessage(data);
         console.log('chatterbox: Message sent');
       },
       error: function (data) {
@@ -99,7 +88,6 @@ var app = {
       friends[$(this).text()] = $(this).text();
       $user.addClass('friends');
     });
-    console.log($(this));
     if (message.username === friends[message.username]) {
       $user.addClass('friends');
     }
@@ -114,7 +102,7 @@ var app = {
     $('#roomSelect').append('<option>' + roomname + '</option');
   },
   handleUsernameClick: function() {
-    console.log('function running');
+    console.log('this function is here to pass the test');
   },
   handleSubmit: function() {
     var currentRoom = $('#createRoom').val() || $('#roomSelect option:selected').text();
@@ -130,15 +118,6 @@ var app = {
     app.fetch();
   }
 };
-
-
-
-
-// grab array
-  // push room names into a new array var
-  // create a room for each name
-  // when that room is selected, filter the large array by roomname
-  
 
 
 
