@@ -105,11 +105,14 @@ p {
 .username {
   padding: 5px 0 0 10px;
   color: white;
-  font-weight: bold;
   margin-bottom: 10px;
 }
 
 .messages {
   margin-top: 0;
   padding: 0 0 5px 10px;
+}
+
+.friends {
+  font-weight: bold;
 }

@@ -2,12 +2,12 @@
 window.user = window.location.search.split('=')[1];
 window.user = 'Bob';
 var rooms = [];
+var friends = {};
+
 var app = {
   init: function() {
     this.fetch();
-    $('.username').on('click', function() {
-      app.handleUsernameClick();
-    });    
+    $('.username').on('click', app.handleUsernameClick);    
     $('#send').on('submit', function(event) {
        event.preventDefault();
        app.handleSubmit();
@@ -16,10 +16,21 @@ var app = {
       event.preventDefault();
       app.fetch();
     });
+    $('#roomButton').on('submit', function(event) {
+      event.preventDefault();
+      console.log($('#createRoom').val());
+      $('#roomSelect').append('<option value="' + $('#createRoom').text() + '">' + $('#createRoom').text() + '</option>');
+    });
+    // $('body').on('click', function(event) {
+    //   event.preventDefault();
+    //   console.log('asdf');
+    //   friends[$(this).first().first().val()] = $(this).first().first().val();
+    //   //console.log(friends);
+    // });
   },
   server: 'http://parse.atx.hackreactor.com/chatterbox/classes/messages',
   send: function(message) {
-    console.log('send ran');
+    //console.log('send ran');
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
       url: this.server,
@@ -43,11 +54,10 @@ var app = {
       // This is the url you should use to communicate with the parse API server.
       url: this.server,
       type: 'GET',
-      data: { limit: 50, order: "-createdAt" }, //message, 
+      data: { limit: 50, order: "-createdAt" },
       contentType: 'application/json',
       success: function (data) {
         for (var i = data.results.length - 1; i >= 0; i--) {
-          //debugger;
           if (!rooms.includes(data.results[i].roomname) && data.results[i].roomname !== undefined) {
             rooms.push(data.results[i].roomname);
             $('#roomSelect').append('<option value="' + data.results[i].roomname + '">' + data.results[i].roomname + '</option>');
@@ -56,22 +66,18 @@ var app = {
             $('#roomSelect').append('<option value="' + data.results[i].roomName + '">' + data.results[i].roomName + '</option>');
           }
         }
-        //$('#roomSelect').children().remove();
+        $('#chats').children().remove();
         for (var j = 0; j < data.results.length; j++) {
           if (data.results[j].roomname !== undefined) {
-            console.log($('select:option selected').val());
             if (data.results[j].roomname === $('#roomSelect option:selected').text()) { 
-              console.log('running roomname');
               app.renderMessage(data.results[j]);
             }
           } else {
             if (data.results[j].roomName === $('#roomSelect option:selected').text()) {
-              console.log('running roomName capitalized');
               app.renderMessage(data.results[j]);
             }
           }
         }
-        console.log(data);
         console.log('chatterbox: Message received');
       },
       error: function (data) {
@@ -85,31 +91,38 @@ var app = {
     $('#chats').children().remove();
   },
   renderMessage: function(message) {
-    //console.log(message);
     const $box = $('<div class="box"></div>');
     const $user = $('<p id="user" class="username"></p>');
     const $message = $('<p id="message" class="messages"></p>');
+    $user.on('click', function(event) {
+      event.preventDefault();
+      friends[$(this).text()] = $(this).text();
+      $user.addClass('friends');
+    });
+    console.log($(this));
+    if (message.username === friends[message.username]) {
+      $user.addClass('friends');
+    }
     $user.text(message.username);
     $message.text(message.text);
     $box.prepend($message);
     $box.prepend($user);
     $('#chats').prepend($box);
-    //$('#chats').prepend('<div class="box"><p id="user" class="username">' + message.username + ':</p><p id="message" class="messages">' + message.text + '</p></div>');
+ 
   },
   renderRoom: function(roomname) {
     $('#roomSelect').append('<option>' + roomname + '</option');
   },
   handleUsernameClick: function() {
-    //console.log('function running');
+    console.log('function running');
   },
   handleSubmit: function() {
-    //console.log($('#message').val());
+    var currentRoom = $('#createRoom').val() || $('#roomSelect option:selected').text();
     var message = {
       username: window.user,
       text: $('#message').val(),
-      roomname: 'lobby'
+      roomname: currentRoom
     };
-    //message = JSON.stringify(message);
     app.send(message);
      
   },
