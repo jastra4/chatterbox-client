@@ -9,7 +9,7 @@ body {
     width: 500px;
     margin: auto;
     text-align: left;
-    background: white;
+    background: gray;
     padding: 50px 60px;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
@@ -88,3 +88,28 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+#chats {
+  border-radius: 10px;
+}
+
+.box {
+  background: black;
+  color: red;
+  border-radius: 10px;
+}
+
+p {
+  display: block;
+}
+
+.username {
+  padding: 5px 0 0 10px;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.messages {
+  margin-top: 0;
+  padding: 0 0 5px 10px;
+}

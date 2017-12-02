@@ -28,9 +28,20 @@
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
     <form action="#" id="send" method="post">
-      <input type="text" name="message" id="message"/>
+      Room:
+      <select id="roomSelect"></select>
+      <br>
+      <br>
+      Create Room:
+      <input type="text" name="room" id="createRoom" style="width: 220px"/>
+      <input type="submit" id="roomButton"/>
+      <br>
+      <br>
+      Message:
+      <input type="text" name="message" id="message" style="width: 250px"/>
       <input type="submit" name="submit" class="submit" id="button"/>
     </form>
+    <button class="refresh">Refresh</button>
       <!--<form id="send">
         Room:
         <select id="roomSelect"></select>
